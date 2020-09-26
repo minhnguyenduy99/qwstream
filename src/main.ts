@@ -3,7 +3,7 @@ import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { ConfigService } from "@nestjs/config";
-import { APP_CONFIG } from "./app.config";
+import { APP_CONFIG_KEY } from "./app.config";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,10 +17,10 @@ async function bootstrap() {
   .build();
 
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup(config.get(APP_CONFIG.SWAGGER_API_PATH), app, document);
+  SwaggerModule.setup(config.get(APP_CONFIG_KEY.SWAGGER_API_PATH), app, document);
 
-  const host = config.get(APP_CONFIG.HOST);
-  const port = config.get(APP_CONFIG.PORT);
+  const host = config.get(APP_CONFIG_KEY.HOST);
+  const port = config.get(APP_CONFIG_KEY.PORT);
 
   await app.listen(port, host);
 }
