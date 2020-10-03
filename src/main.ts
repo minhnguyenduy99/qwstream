@@ -1,12 +1,15 @@
 import "module-alias/register";
 import { NestFactory } from "@nestjs/core";
-import { AppModule } from "./app.module";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { ConfigService } from "@nestjs/config";
+import { AppModule } from "./app.module";
 import { APP_CONFIG_KEY } from "./app.config";
+import { BodyValidationPipe } from "@helpers/validation";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.useGlobalPipes(new BodyValidationPipe());
 
   const config = app.get(ConfigService);
 

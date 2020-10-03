@@ -22,7 +22,8 @@
   },
   "_moduleAliases": {
     "@src/*": "dist/*/index.js",
-    "@services/*": "dist/services/*/index.js"
+    "@services/*": "dist/services/*/index.js",
+    "@helpers/*": "dist/helpers/*/index.js"
   },
   "dependencies": {
     "@nestjs/common": "^7.0.0",

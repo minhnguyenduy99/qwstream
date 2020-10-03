@@ -13,7 +13,8 @@
     "incremental": true,
     "paths": {
       "@src/*": ["src/*/index"],
-      "@services/*": ["src/services/*/index"]
+      "@services/*": ["src/services/*/index"],
+      "@helpers/*": ["src/helpers/*/index"]
     }
   }
 }
