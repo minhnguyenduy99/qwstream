@@ -5,11 +5,19 @@ import { ConfigService } from "@nestjs/config";
 import { AppModule } from "./app.module";
 import { APP_CONFIG_KEY } from "./app.config";
 import { BodyValidationPipe } from "@helpers/validation";
+import { initAdapter } from "@services/redis-socket";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.useGlobalPipes(new BodyValidationPipe());
+
+  initAdapter(app);
+
+  app.enableCors({
+    origin: /localhost:8080$/,
+    credentials: true
+  });
 
   const config = app.get(ConfigService);
 

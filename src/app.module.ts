@@ -1,10 +1,12 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
+import { MongooseModule } from "@nestjs/mongoose";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { AppConfig } from "./app.config";
 import { UserManagementModule } from "./user-management";
-import { MongooseModule } from "@nestjs/mongoose";
+import { StreamingModule } from "./streaming";
+import { RedisSocketModule } from "@services/redis-socket";
 
 @Module({
   imports: [
@@ -15,7 +17,9 @@ import { MongooseModule } from "@nestjs/mongoose";
     MongooseModule.forRoot(
       process.env.MONGO_DATABASE_URI
     ),
-    UserManagementModule
+    RedisSocketModule,
+    UserManagementModule,
+    StreamingModule
   ],
   controllers: [AppController],
   providers: [AppService],
