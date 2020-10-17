@@ -12,11 +12,7 @@ export interface IResultLimiter {
 }
 
 export interface LimitOptions {
-  limit?: number;
-  /**
-   * The offset from which the query starts. Default is `0`
-   */
-  offset?: number;
+  page?: number;
 
   /**
    * The list of aggregations applied to the query

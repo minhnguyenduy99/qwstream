@@ -14,16 +14,18 @@ export default class ResultLimiter implements IResultLimiter {
 
   async query<T extends Document>(
     model: Model<T>,
-    { limit = this.limitOptions.limit, offset = 0, aggregates = [], placeholders = {} }: LimitOptions): 
+    { page = 1, aggregates = [], placeholders = {} }: LimitOptions): 
     Promise<ResultLimiterOuptput<T>> {
+    
+    const offset = (page - 1) * this.limitOptions.limit;
 
     const aggregate = model.aggregate(aggregates);
     const [results, remainItemsCount] = await Promise.all([
-      aggregate.skip(offset).limit(limit).exec(),
+      aggregate.skip(offset).limit(this.limitOptions.limit).exec(),
       this.countRemainItems(model, offset)
     ]);
 
-    const limitResult = this.constructLimitInfor(placeholders, results, remainItemsCount);
+    const limitResult = this.constructLimitInfor(placeholders, results, remainItemsCount, page);
     
     return limitResult as ResultLimiterOuptput<T>;
   }
@@ -41,23 +43,23 @@ export default class ResultLimiter implements IResultLimiter {
     return result.length === 0 ? 0 : result[0]["count"];
   }
 
-  protected constructLimitInfor(placeholders: any, results: any[], remainItemCount: number): ResultLimiterOuptput<any> {
+  protected constructLimitInfor(placeholders: any, results: any[], remainItemCount: number, page = 1): ResultLimiterOuptput<any> {
     return {
-      next: this.constructQueryURL(placeholders),
+      next: remainItemCount === 0 ? null : this.constructNextQueryURL(placeholders, page),
       remain_item_count: remainItemCount,
       results: results
     }
   }
 
-  protected constructQueryURL(placeholders) {
+  protected constructNextQueryURL(placeholders, page = 1) {
     let { requestURL: parsedQueryURL } = this.limitOptions;
-    const { limit, limitQueryParam } = this.limitOptions;
+    const { limitQueryParam } = this.limitOptions;
     Object.keys(placeholders).forEach((key => {
       if (!placeholders[key]) {
         throw Error("Dynamic route is invalid");
       }
       parsedQueryURL = parsedQueryURL.replace(`{${key}}`, placeholders[key]);
     }));
-    return `${parsedQueryURL}?${limitQueryParam}=${limit}`;
+    return `${parsedQueryURL}?${limitQueryParam}=${page + 1}`;
   }
 } 

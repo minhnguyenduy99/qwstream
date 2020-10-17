@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import Paginator from "./paginator/paginator";
 import { IPaginator, PaginationConstruct } from "./paginator/pagination.interfaces";
-import ResultLimiter from "./limiter/ResultLimiter";
+import ResultLimiter from "./limiter/result-limiter";
 import { IResultLimiter, ResultLimiterConstruct } from "./limiter/result-limiter.interfaces";
 
 @Injectable()
