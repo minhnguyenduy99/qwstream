@@ -12,7 +12,7 @@ async function bootstrap() {
 
   app.useGlobalPipes(new BodyValidationPipe());
 
-  initAdapter(app);
+  // initAdapter(app);
 
   app.enableCors({
     origin: /localhost:8080$/,

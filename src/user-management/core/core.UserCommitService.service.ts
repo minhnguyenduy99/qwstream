@@ -1,24 +1,53 @@
-import { Injectable, NotImplementedException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { CreateUserInput } from "./core.dto";
-import { UserNotFoundException } from "./core.errors";
+import { EncryptService } from "@services/encrypt";
+import { UsernameWasTakenException, UserNotFoundException, WrongPasswordException } from "./core.errors";
 import { User } from "./core.user.model";
-
-
+import { UserQueryService } from "./core.UserQueryService.service";
+import { UpdatePasswordInput, CreateUserInput, UpdateOnlineStatusInput } from "./core.dto.user";
+import { ProfileCommitService } from "./core.ProfileCommitService.service";
 
 @Injectable()
 export class UserCommitService {
 
-    constructor(@InjectModel(User.name) private userModel: Model<User>) {
-    }
+    constructor(
+        @InjectModel(User.name) private userModel: Model<User>,
+        private readonly queryService: UserQueryService,
+        private readonly profileCommitService: ProfileCommitService,
+        private readonly encryptService: EncryptService
+    ) { }
 
-    createUser(input: CreateUserInput) {
-        throw new NotImplementedException();
-    }
-
-    async findUserById(userId: string): Promise<User> {
-        const user = await this.userModel.findById(userId);
+    async createUser(input: CreateUserInput) {
+        const checkUser = await this.queryService.findUserByUsername(input.username);
+        if (checkUser) {
+            throw new UsernameWasTakenException();
+        }
+        input.password = await this.encryptService.hash(input.password);
+        const createUser = new this.userModel(input);
+        const user = await createUser.save();
+        this.profileCommitService.createProfile({uid: user._id});
         return user;
+    }
+
+    async updatePassword(input: UpdatePasswordInput) {
+        const user = await this.queryService.findUserById(input.uid);
+        if (!user) {
+            throw new UserNotFoundException();
+        }
+        if (!await this.encryptService.compare(input.oldPassword, user.password)) {
+            throw new WrongPasswordException();
+        }
+        user.password = await this.encryptService.hash(input.newPassword);
+        user.save();
+    }
+
+    async updateOnlineStatus(input: UpdateOnlineStatusInput) {
+        let user = await this.queryService.findUserById(input.uid);
+        if (user.onlineStatus == input.onlineStatus) {
+            user.onlineStatus = input.onlineStatus;
+            return user.save();
+        }
+        return null;
     }
 }

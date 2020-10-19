@@ -5,7 +5,6 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { AppConfig } from "./app.config";
 import { UserManagementModule } from "./user-management";
-import { StreamingModule } from "./streaming";
 import { RedisSocketModule } from "@services/redis-socket";
 
 @Module({
@@ -17,9 +16,7 @@ import { RedisSocketModule } from "@services/redis-socket";
     MongooseModule.forRoot(
       process.env.MONGO_DATABASE_URI
     ),
-    RedisSocketModule,
-    UserManagementModule,
-    StreamingModule
+    UserManagementModule
   ],
   controllers: [AppController],
   providers: [AppService],

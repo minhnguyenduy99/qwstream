@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { CoreModule } from "./core";
-import { UserController } from "./controllers";
+import { ProfileController, UserController } from "./controllers";
 import { ConfigModule } from "@nestjs/config";
 import { ModuleConfigLoader } from "./user-management.config"
 
@@ -11,6 +11,6 @@ import { ModuleConfigLoader } from "./user-management.config"
             load: [ModuleConfigLoader]
         })
     ],
-    controllers: [UserController]
+    controllers: [UserController, ProfileController]
 })
 export default class UserManagementModule {}

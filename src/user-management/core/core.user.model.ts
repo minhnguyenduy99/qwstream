@@ -10,7 +10,11 @@ export class User extends Document {
 
     @Prop()
     password: string;
-}
 
+    @Prop({
+        default: 0
+    })
+    onlineStatus: number;
+}
 
 export const UserSchema = SchemaFactory.createForClass(User);

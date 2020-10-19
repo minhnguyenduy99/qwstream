@@ -1,8 +1,12 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
+import { EncryptModule } from "@services/encrypt";
 import { Profile, ProfileSchema } from "./core.profile.model";
+import { ProfileCommitService } from "./core.ProfileCommitService.service";
+import { ProfileQueryService } from "./core.ProfileQueryService.service";
 import { User, UserSchema } from "./core.user.model";
 import { UserCommitService } from "./core.UserCommitService.service"
+import { UserQueryService } from "./core.UserQueryService.service";
 
 
 @Module({
@@ -10,10 +14,12 @@ import { UserCommitService } from "./core.UserCommitService.service"
         MongooseModule.forFeature([
             { name: Profile.name, schema: ProfileSchema },
             { name: User.name, schema: UserSchema },
-        ])
+        ]),
+        EncryptModule
     ],
-    providers: [UserCommitService],
-    exports: [UserCommitService]
+    providers: [UserCommitService, UserQueryService, ProfileQueryService, ProfileCommitService],
+    exports: [UserCommitService, UserQueryService, ProfileQueryService, ProfileCommitService]
 })
+
 export default class CoreModule {
 }

@@ -1,20 +1,50 @@
-import { Body, Controller, Get, Param, Post, Query, UsePipes } from "@nestjs/common";
-import { ApiBody, ApiTags } from "@nestjs/swagger";
+import { Body, Controller, Get, Param, Post, Put, Query, UseInterceptors, UsePipes } from "@nestjs/common";
 import { ParamValidationPipe, QueryValidationPipe } from "@helpers/validation";
-import { CreateUserInput, UserCommitService } from "@src/user-management/core";
+import { UpdatePasswordInput, UpdatePasswordOutput, CreateUserInput, CreateUserOutput, GetOnlineStatusInput, GetOnlineStatusOutput, UpdateOnlineStatusInput, UpdateOnlineStatusOutput, UserCommitService, UserQueryService } from "@src/user-management/core";
 import { FindUserQuery } from "./controller.interfaces";
 import { errors } from "../core";
+import { FilesInterceptor } from "@nestjs/platform-express/multer/interceptors/files.interceptor";
 
-
-@ApiTags("user")
 @Controller("user")
 export class UserController {
-  constructor(private readonly userService: UserCommitService) {}
+  constructor(
+    private readonly userService: UserCommitService,
+    private readonly queryService: UserQueryService
+  ) { }
 
-  @ApiBody({ type: [CreateUserInput] })
-  @Post()
-  createUser(@Body() input: CreateUserInput) {
-    this.userService.createUser(input);
+  @Post("/sign-up")
+  @UseInterceptors(FilesInterceptor('files'))
+  async createUser(@Body() input: CreateUserInput) {
+    const user = await this.userService.createUser(input);
+    return {
+      uid: user._id,
+      code: 0
+    } as CreateUserOutput;
+  }
+
+  @Put("/update-password")
+  @UseInterceptors(FilesInterceptor('files'))
+  async updatePassword(@Body() input: UpdatePasswordInput) {
+    await this.userService.updatePassword(input);
+    return {
+      code: 0
+    } as UpdatePasswordOutput;
+  }
+
+  @Get("/online-status")
+  async getOnlineStatus(@Body() input: GetOnlineStatusInput) {
+    const onlineStatus = await this.queryService.getOnlineStatus(input.uid);
+    return {
+      onlineStatus: onlineStatus
+    } as GetOnlineStatusOutput;
+  }
+
+  @Put("/update-online-status")
+  async updateOnlineStatus(@Body() input: UpdateOnlineStatusInput) {
+    const user = await this.userService.updateOnlineStatus(input);
+    return {
+      code: user ? 0 : 1
+    } as UpdateOnlineStatusOutput
   }
 
   /**
@@ -25,9 +55,9 @@ export class UserController {
    * trong class này
    */
   @Get("/:user_id/:profile_id")
-  @UsePipes(ParamValidationPipe)      
+  @UsePipes(ParamValidationPipe)
   async findUserById(@Param() params: FindUserQuery) {
-    const user = await this.userService.findUserById(params.user_id);
+    const user = await this.queryService.findUserById(params.user_id);
     if (!user) {
       throw new errors.UserNotFoundException();
     }
@@ -42,8 +72,8 @@ export class UserController {
    */
   @Get()
   @UsePipes(QueryValidationPipe)
-  async fileUserByIdWithQuery(@Query() query: FindUserQuery) {
-    const user = await this.userService.findUserById(query.user_id);
+  async findUserByIdWithQuery(@Query() query: FindUserQuery) {
+    const user = await this.queryService.findUserById(query.user_id);
     if (!user) {
       throw new errors.UserNotFoundException();
     }

@@ -1,4 +1,4 @@
-import { Validate } from "class-validator";
+import { validate, Validate } from "class-validator";
 import { ObjectIdFormat } from "@helpers/validation";
 
 // defines query and params type (if necessary)
@@ -6,7 +6,4 @@ import { ObjectIdFormat } from "@helpers/validation";
 export class FindUserQuery {
     @Validate(ObjectIdFormat)
     user_id: string;
-
-    @Validate(ObjectIdFormat)
-    profile_id: string;
 }

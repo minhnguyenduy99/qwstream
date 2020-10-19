@@ -1,19 +1,24 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 
-
-
-
 @Schema()
 export class Profile extends Document {
+    @Prop({
+        required: true
+    })
+    uid: string;
     
     @Prop()
-    display_name: string;
+    nickname: string;
 
-    @Prop()
-    gender: string;
+    @Prop({
+        default: 0
+    })
+    gender: number;
 
-    @Prop()
+    @Prop({
+        default: 0
+    })
     date_of_birth: number;
 }
 
