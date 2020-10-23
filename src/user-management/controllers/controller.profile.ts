@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Put, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Get, Put, Query, UseInterceptors } from "@nestjs/common";
 import { FilesInterceptor } from "@nestjs/platform-express/multer/interceptors";
 import { FindProfileInput, FindProfileOutput, ProfileCommitService, ProfileQueryService, UpdateProfileInput, UpdateProfileOutput } from "../core";
 
@@ -10,8 +10,8 @@ export class ProfileController {
     ) { }
 
     @Get()
-    async findProfile(@Body() input: FindProfileInput) {
-        const profile = await this.profileQueryService.findProfile(input.uid);
+    async findProfile(@Query("uid") uid: string) {
+        const profile = await this.profileQueryService.findProfile(uid);
         return {
             nickname: profile.nickname,
             day_of_birth: profile.date_of_birth,

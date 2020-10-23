@@ -1,0 +1,1 @@
+export { ChannelController } from "./controller.channel"
