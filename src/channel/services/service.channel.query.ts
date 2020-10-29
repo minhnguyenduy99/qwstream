@@ -14,7 +14,7 @@ export class ChannelQueryService {
         private readonly paginatorFactory: PaginatorFactory,
     ) {
         this.limiter = this.paginatorFactory.createLimiter({
-            requestURL: `http://localhost:3000/channel`,
+            requestURL: `http://localhost:3000/channel/find`,
             limit: this.DEFAULT_LIMIT_QUERY_SIZE,
             limitQueryParam: "page"
         })
@@ -25,16 +25,20 @@ export class ChannelQueryService {
     }
 
     async findChannelByName(name: string, page = 1) {
-        return this.limiter.query(this.channelModel, {
-            page: page,
-            aggregates: [
-                {
-                    $match: {
-                        $text: { $search: name }
-                    }
-                }
-            ]
-        })
-        // this.channelModel.find({ $text: { $search: name } });
+        // return this.limiter.query(this.channelModel, {
+        //     page: page,
+        //     aggregates: [
+        //         {
+        //             $match: {
+        //                 $text: { $search: name },
+                        
+        //             }
+        //         },
+        //         {
+        //             $project: {followers: false, __v: false}
+        //         }
+        //     ]
+        // })
+        return this.channelModel.find({ $text: { $search: "\"" + name + "\"" } });
     }
 }

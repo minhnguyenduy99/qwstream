@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { ProfileQueryService } from "src/user-management/core";
-import { UpdateChannelInfoInput } from "../dto";
+import { CreateChannelInput, UpdateChannelInfoInput } from "../dto";
 import { Channel } from "../model";
 
 @Injectable()
@@ -12,12 +12,10 @@ export class ChannelCommitService {
         private readonly profileQueryService: ProfileQueryService
     ) { }
 
-    async createChannel(uid: string) {
-        const profile = await this.profileQueryService.findProfile(uid);
-        let channel = new this.channelModel({
-            uid: uid
-        });
-        channel.name = profile.nickname;
+    async createChannel(input: CreateChannelInput) {
+        const profile = await this.profileQueryService.findProfile(input.uid);
+        let channel = new this.channelModel(input);
+        channel.name = input.name || profile.nickname;
         return channel.save();
     }
 

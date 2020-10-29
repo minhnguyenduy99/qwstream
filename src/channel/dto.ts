@@ -7,6 +7,9 @@ export class CreateChannelInput {
     @IsNotEmpty()
     @Validate(ObjectIdFormat)
     uid: string;
+
+    name?: string;
+    bio?: string;
 }
 
 export interface CreateChannelOutPut {

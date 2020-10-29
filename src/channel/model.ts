@@ -16,7 +16,9 @@ export class Channel extends Document {
     })
     uid: string;
 
-    @Prop()
+    @Prop({
+        index: "text"
+    })
     name: string;
 
     @Prop({
@@ -44,6 +46,3 @@ export class Channel extends Document {
 }
 
 export const ChannelSchema = SchemaFactory.createForClass(Channel);
-ChannelSchema.index({
-    name: "text"
-})
