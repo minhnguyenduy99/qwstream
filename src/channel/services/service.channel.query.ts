@@ -21,24 +21,26 @@ export class ChannelQueryService {
     }
 
     async getChannel(cid: string) {
-        return this.channelModel.findById(cid, { followers: false, _id: false });
+        const channel = await this.channelModel.findById(cid, { followers: false, _id: false });
+        return channel;
     }
 
     async findChannelByName(name: string, page = 1) {
-        // return this.limiter.query(this.channelModel, {
-        //     page: page,
-        //     aggregates: [
-        //         {
-        //             $match: {
-        //                 $text: { $search: name },
-                        
-        //             }
-        //         },
-        //         {
-        //             $project: {followers: false, __v: false}
-        //         }
-        //     ]
-        // })
-        return this.channelModel.find({ $text: { $search: "\"" + name + "\"" } });
+        const channels = this.limiter.query(this.channelModel, {
+            page: page,
+            aggregates: [
+                {
+                    $match: {
+                        $text: { $search: name },
+
+                    }
+                },
+                {
+                    $project: { followers: false, __v: false }
+                }
+            ]
+        })
+        return channels;
+        // return this.channelModel.find({ $text: { $search: "\"" + name + "\"" } });
     }
 }

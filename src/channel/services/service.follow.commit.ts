@@ -10,10 +10,16 @@ export class FollowCommitService {
     ) { }
 
     async onFollow(cid: string, uid: string) {
-        await this.followModel.updateOne({ cid: cid }, { $push: { followers: uid } })
+        return this.followModel.updateOne({ cid: cid }, {
+            $push: { followers: uid },
+            $inc: { count: 1 }
+        })
     }
 
     async onUnfollow(cid: string, uid: string) {
-        await this.followModel.updateOne({ cid: cid }, { $pull: { followers: uid } })
+        return this.followModel.updateOne({ cid: cid }, {
+            $pull: { followers: uid },
+            $inc: { count: -1 }
+        })
     }
 }

@@ -9,12 +9,7 @@ export class FollowQueryService {
         @InjectModel(Channel.name) private readonly channelModel: Model<Channel>
     ) { }
 
-    async getFollowByChannelID(cid: string) {
-        
-    }
+    async isFollow(cid: string, uid: string) {
 
-    async getFollowCount(cid: string) {
-        // const count = await this.followModel.findOne({ cid: cid }, { followers: false });
-        // return count.count;
     }
 }

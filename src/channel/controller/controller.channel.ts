@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, Post, Query, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Put, Query, UseInterceptors } from "@nestjs/common";
 import { FilesInterceptor } from "@nestjs/platform-express";
 import { ObjectIdFormat, ParamValidationPipe } from "src/helpers/validation";
-import { CreateChannelInput, CreateChannelOutPut } from "../dto";
+import { ChannelNotFoundException } from "..";
+import { CreateChannelInput, CreateChannelOutPut, UpdateChannelInfoInput, UpdateChannelInfoOutput } from "../dto";
 import { ChannelQueryService } from "../services";
 import { ChannelCommitService } from "../services/service.channel.commit";
 
@@ -27,9 +28,21 @@ export class ChannelController {
         return channels;
     }
 
+    @Put('update')
+    @UseInterceptors(FilesInterceptor('files'))
+    async updateChannelInfo(@Body() input: UpdateChannelInfoInput) {
+        await this.channelCommitService.updateInfo(input);
+        return {
+            code: 0
+        } as UpdateChannelInfoOutput
+    }
+
     @Get(':cid')
     async getChannelByCID(@Param("cid", new ParamValidationPipe(ObjectIdFormat)) cid: string) {
         const channel = await this.channelQueryService.getChannel(cid);
+        if (!channel) {
+            throw new ChannelNotFoundException();
+        }
         return channel;
     }
 

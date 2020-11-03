@@ -20,12 +20,12 @@ export class ChannelCommitService {
     }
 
     async deleteChannel(cid: string) {
-        await this.channelModel.deleteOne({ _id: cid });
+        return this.channelModel.deleteOne({ _id: cid });
     }
 
     async updateInfo(update: UpdateChannelInfoInput) {
         const cid = update.cid;
         delete update.cid;
-        await this.channelModel.updateOne({ _id: cid }, update)
+        return this.channelModel.updateOne({ _id: cid }, update)
     }
 }

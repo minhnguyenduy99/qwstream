@@ -29,3 +29,11 @@ export class UpdateChannelInfoInput {
 
     social?: Social;
 }
+
+export interface UpdateChannelInfoOutput {
+    code?: number;
+}
+
+export interface OnFollowOutput {
+    code?: number;
+}
