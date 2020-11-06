@@ -5,7 +5,6 @@ import { User } from "./core.user.model";
 import { UserInvalidException } from "./core.errors";
 import { EncryptService } from "@services/encrypt";
 import { LoginUserInput, LoginUserOutput } from "./core.dto.user";
-import { throwIfEmpty } from "rxjs/operators";
 
 @Injectable()
 export class UserQueryService {
@@ -41,5 +40,15 @@ export class UserQueryService {
     async getOnlineStatus(uid: string) {
         const user = await this.findUserById(uid);
         return user.onlineStatus;
+    }
+
+    async isFollow(cid: string, uid: string) {
+        const channel = await this.userModel.findOne({
+            _id: cid,
+            following: {
+                $in: [cid]
+            }
+        });
+        return !!channel
     }
 }

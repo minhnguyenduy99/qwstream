@@ -31,6 +31,18 @@ export class UserInvalidException extends CoreModuleException {
     }
 }
 
+export class UserAlreadyFollowedException extends CoreModuleException {
+    constructor() {
+        super("User already followed this channel", HttpStatus.BAD_REQUEST);
+    }
+}
+
+export class UserNotFollowedException extends CoreModuleException {
+    constructor() {
+        super("User not follow this channel yet", HttpStatus.BAD_REQUEST);
+    }
+}
+
 export class WrongPasswordException extends CoreModuleException {
     constructor() {
         super("Wrong password", HttpStatus.BAD_REQUEST);

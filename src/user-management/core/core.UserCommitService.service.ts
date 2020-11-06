@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { EncryptService } from "@services/encrypt";
-import { UsernameWasTakenException, UserNotFoundException, WrongPasswordException } from "./core.errors";
+import { UserAlreadyFollowedException, UsernameWasTakenException, UserNotFollowedException, UserNotFoundException, WrongPasswordException } from "./core.errors";
 import { User } from "./core.user.model";
 import { UserQueryService } from "./core.UserQueryService.service";
 import { UpdatePasswordInput, CreateUserInput, UpdateOnlineStatusInput } from "./core.dto.user";
@@ -26,7 +26,7 @@ export class UserCommitService {
         input.password = await this.encryptService.hash(input.password);
         const createUser = new this.userModel(input);
         const user = await createUser.save();
-        this.profileCommitService.createProfile({uid: user._id});
+        this.profileCommitService.createProfile({ uid: user._id });
         return user;
     }
 
@@ -40,6 +40,28 @@ export class UserCommitService {
         }
         user.password = await this.encryptService.hash(input.newPassword);
         user.save();
+    }
+
+    async onFollow(cid: string, uid: string) {
+        const isFollow = await this.queryService.isFollow(cid, uid);
+        if (isFollow) {
+            throw new UserAlreadyFollowedException();
+        }
+        return this.userModel.updateOne({ _id: uid }, {
+            $push: { following: cid },
+            $inc: { count: 1 }
+        })
+    }
+
+    async onUnfollow(cid: string, uid: string) {
+        const isFollow = await this.queryService.isFollow(cid, uid);
+        if (!isFollow) {
+            throw new UserNotFollowedException();
+        }
+        return this.userModel.updateOne({ _id: uid }, {
+            $pull: { followers: cid },
+            $inc: { count: -1 }
+        })
     }
 
     async updateOnlineStatus(input: UpdateOnlineStatusInput) {
