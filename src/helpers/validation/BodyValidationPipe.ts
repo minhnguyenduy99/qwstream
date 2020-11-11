@@ -24,7 +24,7 @@ export class BodyValidationPipe implements PipeTransform<any> {
     }
 
     private toValidate(metaType: Type<any>) {
-        const allowedType: Type<any>[] = [Boolean, String, Number, Array, Object];
+        const allowedType: Type<any>[] = [Boolean, String, Number, Array];
         return !allowedType.includes(metaType);
     }
 }
