@@ -12,6 +12,10 @@ export class RedisDBService {
         @Inject(REDIS_CLIENT) private readonly redisDB: RedisClient
     ) {}
 
+    get redis() {
+        return this.redisDB;
+    }
+
     
     async setUniqueKey(key: string, value: string): Promise<SetUniqueKeyOutput> {
         const valueWithkey = await this.redisDB.get(key);
