@@ -34,6 +34,11 @@ export class Channel extends Document {
     social: Record<string, any>;
 
     @Prop({
+        default: ""
+    })
+    avatar: string;
+
+    @Prop({
         default: 0
     })
     count: number;

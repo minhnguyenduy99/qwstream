@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 import { PaginationModule } from "src/helpers/pagination";
+import { ImageStorageModule } from "src/services/image-storage";
 import { UserManagementModule } from "src/user-management";
 import { UserCommitService, UserQueryService } from "src/user-management/core";
 import { FollowController } from "./controller";
@@ -17,6 +18,9 @@ import { ChannelQueryService } from "./services/service.channel.query";
         ]),
         PaginationModule,
         UserManagementModule,
+        ImageStorageModule.forFeature({
+            albumName: "Channel Avatar"
+        })
     ],
     providers: [
         ChannelCommitService, ChannelQueryService, FollowCommitService, FollowQueryService

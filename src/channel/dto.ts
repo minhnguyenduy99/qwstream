@@ -28,6 +28,8 @@ export class UpdateChannelInfoInput {
     bio?: string;
 
     social?: Social;
+
+    avatar?: string;
 }
 
 export interface UpdateChannelInfoOutput {
@@ -36,4 +38,13 @@ export interface UpdateChannelInfoOutput {
 
 export interface OnFollowOutput {
     code?: number;
+}
+
+export class UploadAvatarInput {
+    @IsString()
+    @IsNotEmpty()
+    @Validate(ObjectIdFormat)
+    cid: string;
+
+    file: any;
 }

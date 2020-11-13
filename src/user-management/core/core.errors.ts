@@ -54,3 +54,9 @@ export class ProfileNotFoundException extends CoreModuleException {
         super("Profile not found", HttpStatus.NOT_FOUND);
     }
 }
+
+export class ProfileUploadAvatarException extends CoreModuleException {
+    constructor(msg = "") {
+        super("Upload fail! " + msg, HttpStatus.BAD_REQUEST);
+    }
+}

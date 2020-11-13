@@ -21,9 +21,11 @@ export class UpdateProfileInput {
     nickname?: string;
     gender?: number;
     day_of_birth?: number;
+    avatar?: string;
 }
 
 export interface UpdateProfileOutput {
+    avatar: any;
     code?: number;
 }
 
@@ -39,4 +41,13 @@ export interface FindProfileOutput {
     nickname: string;
     gender: number;
     day_of_birth: number;
+}
+
+export class UploadAvatarInput {
+    @IsString()
+    @IsNotEmpty()
+    @Validate(ObjectIdFormat)
+    uid: string;
+
+    file: any;
 }

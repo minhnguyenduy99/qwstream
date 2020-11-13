@@ -11,3 +11,9 @@ export class ChannelNotFoundException extends ChannelModuleException {
         super("Channel not found", HttpStatus.NOT_FOUND);
     }
 }
+
+export class ChannelUploadAvatarException extends ChannelModuleException {
+    constructor(msg = "") {
+        super("Upload fail! " + msg, HttpStatus.BAD_REQUEST);
+    }
+}

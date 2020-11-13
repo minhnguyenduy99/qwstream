@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Param, Post, Put, Query, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Put, Query, UploadedFile, UseInterceptors } from "@nestjs/common";
 import { FilesInterceptor } from "@nestjs/platform-express";
+import { UseFormData } from "src/helpers/interceptors";
 import { ObjectIdFormat, ParamValidationPipe } from "src/helpers/validation";
 import { ChannelNotFoundException } from "..";
 import { CreateChannelInput, CreateChannelOutPut, UpdateChannelInfoInput, UpdateChannelInfoOutput } from "../dto";
@@ -10,8 +11,7 @@ import { ChannelCommitService } from "../services/service.channel.commit";
 export class ChannelController {
     constructor(
         private readonly channelCommitService: ChannelCommitService,
-        private readonly channelQueryService: ChannelQueryService,
-        private readonly followQueryService: FollowQueryService
+        private readonly channelQueryService: ChannelQueryService
     ) { }
 
     @Post('create')
@@ -36,6 +36,16 @@ export class ChannelController {
         return {
             code: 0
         } as UpdateChannelInfoOutput
+    }
+
+    @Put("upload-avatar")
+    @UseFormData({ fileField: "avatar" })
+    async uploadAvatar(@Query("cid", new ParamValidationPipe(ObjectIdFormat)) cid: string, @UploadedFile() avatar) {
+        const res = await this.channelCommitService.updateAvatarFromDevice({ cid: cid, file: avatar });
+        return {
+            avatar: res,
+            code: 0
+        }
     }
 
     @Get(':cid')
