@@ -3,14 +3,15 @@ import { FilesInterceptor } from "@nestjs/platform-express";
 import { ObjectIdFormat, ParamValidationPipe } from "src/helpers/validation";
 import { ChannelNotFoundException } from "..";
 import { CreateChannelInput, CreateChannelOutPut, UpdateChannelInfoInput, UpdateChannelInfoOutput } from "../dto";
-import { ChannelQueryService } from "../services";
+import { ChannelQueryService, FollowQueryService } from "../services";
 import { ChannelCommitService } from "../services/service.channel.commit";
 
 @Controller('channel')
 export class ChannelController {
     constructor(
         private readonly channelCommitService: ChannelCommitService,
-        private readonly channelQueryService: ChannelQueryService
+        private readonly channelQueryService: ChannelQueryService,
+        private readonly followQueryService: FollowQueryService
     ) { }
 
     @Post('create')
@@ -24,7 +25,7 @@ export class ChannelController {
 
     @Get('find')
     async findChannelByName(@Query("name") name: string, @Query("page") page: number) {
-        const channels = await this.channelQueryService.findChannelByName(name, page);
+        let channels = await this.channelQueryService.findChannelByName(name, page);
         return channels;
     }
 

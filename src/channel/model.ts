@@ -46,3 +46,7 @@ export class Channel extends Document {
 }
 
 export const ChannelSchema = SchemaFactory.createForClass(Channel);
+
+ChannelSchema.index({
+    followers: 1
+})

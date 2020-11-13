@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 import { PaginationModule } from "src/helpers/pagination";
 import { UserManagementModule } from "src/user-management";
+import { UserCommitService, UserQueryService } from "src/user-management/core";
 import { FollowController } from "./controller";
 import { ChannelController } from "./controller/controller.channel";
 import { Channel, ChannelSchema } from "./model";
