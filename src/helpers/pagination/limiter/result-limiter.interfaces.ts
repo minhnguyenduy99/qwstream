@@ -40,6 +40,10 @@ export interface LimitOptions {
   placeholders?: {
     [key: string]: string;
   }
+
+  additionQuery?: {
+    [key: string]: string;
+  }
 }
 
 export interface ResultLimiterConstruct {
