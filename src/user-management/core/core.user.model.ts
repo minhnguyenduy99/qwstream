@@ -31,5 +31,6 @@ export class User extends Document {
 export const UserSchema = SchemaFactory.createForClass(User);
 
 UserSchema.index({
-    following: 1
+    "following": 1,
+    unique: true
 })

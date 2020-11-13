@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { User } from "./core.user.model";
-import { UserInvalidException } from "./core.errors";
+import { UserInvalidException, UserNotFoundException } from "./core.errors";
 import { EncryptService } from "@services/encrypt";
 import { LoginUserInput, LoginUserOutput } from "./core.dto.user";
 
@@ -43,12 +43,16 @@ export class UserQueryService {
     }
 
     async isFollow(cid: string, uid: string) {
+        const user = await this.userModel.findById(uid, { _id: 1 });
+        if (!user) {
+            throw new UserNotFoundException();
+        }
         const channel = await this.userModel.findOne({
-            _id: cid,
+            _id: uid,
             following: {
                 $in: [cid]
             }
-        });
+        }, { _id: 1 });
         return !!channel
     }
 }

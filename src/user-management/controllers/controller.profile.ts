@@ -13,6 +13,7 @@ export class ProfileController {
     async findProfile(@Query("uid") uid: string) {
         const profile = await this.profileQueryService.findProfile(uid);
         return {
+            pid: profile._id,
             nickname: profile.nickname,
             day_of_birth: profile.date_of_birth,
             gender: profile.gender

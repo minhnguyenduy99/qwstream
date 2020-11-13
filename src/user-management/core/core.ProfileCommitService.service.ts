@@ -5,13 +5,11 @@ import { ProfileNotFoundException, UserNotFoundException } from "./core.errors";
 import { CreateProfileInput, UpdateProfileInput } from "./core.dto.profile";
 import { Profile } from "./core.profile.model";
 import { UserQueryService } from "./core.UserQueryService.service";
-import { ProfileQueryService } from "./core.ProfileQueryService.service";
 
 @Injectable()
 export class ProfileCommitService {
     constructor(
         @InjectModel(Profile.name) private readonly profileModel: Model<Profile>,
-        private readonly profileQueryService: ProfileQueryService,
         private readonly userQueryService: UserQueryService
     ) { }
 

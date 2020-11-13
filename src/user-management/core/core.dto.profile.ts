@@ -35,6 +35,7 @@ export class FindProfileInput {
 }
 
 export interface FindProfileOutput {
+    pid: string
     nickname: string;
     gender: number;
     day_of_birth: number;
