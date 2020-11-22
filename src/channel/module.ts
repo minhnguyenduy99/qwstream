@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
+import { OfficialModule } from "src/authentication/official";
 import { PaginationModule } from "src/helpers/pagination";
 import { ImageStorageModule } from "src/services/image-storage";
 import { UserManagementModule } from "src/user-management";
@@ -18,6 +19,7 @@ import { ChannelQueryService } from "./services/service.channel.query";
         ]),
         PaginationModule,
         UserManagementModule,
+        OfficialModule,
         ImageStorageModule.forFeature({
             albumName: "Channel Avatar"
         })

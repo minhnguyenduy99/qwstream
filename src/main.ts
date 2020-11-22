@@ -5,7 +5,9 @@ import { ConfigService } from "@nestjs/config";
 import { AppModule } from "./app.module";
 import { APP_CONFIG_KEY } from "./app.config";
 import { BodyValidationPipe } from "@helpers/validation";
+import * as cookieParser from "cookie-parser"
 import { initAdapter } from "@services/redis-socket";
+import { from } from "rxjs";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -19,13 +21,14 @@ async function bootstrap() {
     credentials: true
   });
 
+  app.use(cookieParser());
   const config = app.get(ConfigService);
 
   const options = new DocumentBuilder()
-  .setTitle("QWStream API Specification")
-  .setDescription("API Specification for QWStream")
-  .setVersion("1.0")
-  .build();
+    .setTitle("QWStream API Specification")
+    .setDescription("API Specification for QWStream")
+    .setVersion("1.0")
+    .build();
 
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup(config.get(APP_CONFIG_KEY.SWAGGER_API_PATH), app, document);

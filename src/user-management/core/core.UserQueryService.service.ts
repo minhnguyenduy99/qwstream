@@ -23,14 +23,15 @@ export class UserQueryService {
         return user;
     }
 
-    async checkLogin(user: LoginUserInput): Promise<LoginUserOutput> {
+    async checkLogin(user: LoginUserInput) {
         const _user = await this.findUserByUsername(user.username);
         if (!_user) {
             throw new UserInvalidException();
         }
         if (await this.encryptService.compare(user.password, _user.password)) {
             return {
-                code: 0
+                code: 0,
+                uid: _user._id
             }
         } else {
             throw new UserInvalidException();

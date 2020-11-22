@@ -1,4 +1,4 @@
-export { default as CoreModule } from "./core.module";
+export { default as UserModule } from "./core.module";
 export { Profile } from "./core.profile.model";
 export { ProfileCommitService } from "./core.ProfileCommitService.service"
 export { ProfileQueryService } from "./core.ProfileQueryService.service";

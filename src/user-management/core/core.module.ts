@@ -25,5 +25,5 @@ import { UserQueryService } from "./core.UserQueryService.service";
     exports: [UserCommitService, UserQueryService, ProfileQueryService, ProfileCommitService]
 })
 
-export default class CoreModule {
+export default class UserModule {
 }

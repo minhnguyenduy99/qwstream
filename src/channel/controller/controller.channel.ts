@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Param, Post, Put, Query, UploadedFile, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { FilesInterceptor } from "@nestjs/platform-express";
+import { OfficialAuthGuard } from "src/authentication/official";
 import { UseFormData } from "src/helpers/interceptors";
 import { ObjectIdFormat, ParamValidationPipe } from "src/helpers/validation";
 import { ChannelNotFoundException } from "..";
 import { CreateChannelInput, CreateChannelOutPut, UpdateChannelInfoInput, UpdateChannelInfoOutput } from "../dto";
-import { ChannelQueryService, FollowQueryService } from "../services";
+import { ChannelQueryService } from "../services";
 import { ChannelCommitService } from "../services/service.channel.commit";
 
 @Controller('channel')
@@ -15,6 +16,7 @@ export class ChannelController {
     ) { }
 
     @Post('create')
+    @UseGuards(OfficialAuthGuard)
     @UseInterceptors(FilesInterceptor('files'))
     async createChannel(@Body() input: CreateChannelInput) {
         const channel = await this.channelCommitService.createChannel(input);

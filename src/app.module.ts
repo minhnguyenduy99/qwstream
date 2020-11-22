@@ -6,6 +6,7 @@ import { AppService } from "./app.service";
 import { AppConfig } from "./app.config";
 import { UserManagementModule } from "./user-management";
 import { ChannelModule } from "./channel";
+import { AuthModule } from "./authentication";
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { ChannelModule } from "./channel";
       process.env.MONGO_DATABASE_URI
     ),
     UserManagementModule,
-    ChannelModule
+    ChannelModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],
