@@ -15,7 +15,7 @@ async function bootstrap() {
   // initAdapter(app);
 
   app.enableCors({
-    origin: /localhost:8080$/,
+    origin: ["http://192.168.148.57:3016"],
     credentials: true
   });
 
@@ -33,6 +33,8 @@ async function bootstrap() {
   const host = config.get(APP_CONFIG_KEY.HOST);
   const port = config.get(APP_CONFIG_KEY.PORT);
 
-  await app.listen(port, host);
+  await app.listen(port, host, () => {
+    console.log(`Listening on ${host}:${port}`);
+  });
 }
 bootstrap();
