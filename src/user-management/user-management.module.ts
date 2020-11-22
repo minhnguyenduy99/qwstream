@@ -1,5 +1,5 @@
 import { Module } from "@nestjs/common";
-import { CoreModule } from "./core";
+import { CoreModule, ProfileCommitService, ProfileQueryService, UserCommitService, UserQueryService } from "./core";
 import { ProfileController, UserController } from "./controllers";
 import { ConfigModule } from "@nestjs/config";
 import { ModuleConfigLoader } from "./user-management.config"
@@ -11,6 +11,7 @@ import { ModuleConfigLoader } from "./user-management.config"
             load: [ModuleConfigLoader]
         })
     ],
-    controllers: [UserController, ProfileController]
+    controllers: [UserController, ProfileController],
+    exports: [CoreModule]
 })
-export default class UserManagementModule {}
+export default class UserManagementModule { }

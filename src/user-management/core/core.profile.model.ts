@@ -20,6 +20,11 @@ export class Profile extends Document {
         default: 0
     })
     date_of_birth: number;
+
+    @Prop({
+        default: ""
+    })
+    avatar: string;
 }
 
 export const ProfileSchema = SchemaFactory.createForClass(Profile);

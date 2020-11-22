@@ -5,10 +5,7 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { AppConfig } from "./app.config";
 import { UserManagementModule } from "./user-management";
-import { RedisSocketModule } from "@services/redis-socket";
-import { IdGeneratorModule } from "@services/id-generator";
-import { StreamingModule } from "./streaming";
-import { AuthModule } from "./authentication";
+import { ChannelModule } from "./channel";
 
 @Module({
   imports: [
@@ -19,11 +16,8 @@ import { AuthModule } from "./authentication";
     MongooseModule.forRoot(
       process.env.MONGO_DATABASE_URI
     ),
-    AuthModule,
-    IdGeneratorModule,
-    RedisSocketModule,
     UserManagementModule,
-    StreamingModule
+    ChannelModule
   ],
   controllers: [AppController],
   providers: [AppService],

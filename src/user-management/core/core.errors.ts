@@ -31,6 +31,18 @@ export class UserInvalidException extends CoreModuleException {
     }
 }
 
+export class UserAlreadyFollowedException extends CoreModuleException {
+    constructor() {
+        super("User already followed this channel", HttpStatus.BAD_REQUEST);
+    }
+}
+
+export class UserNotFollowedException extends CoreModuleException {
+    constructor() {
+        super("User not follow this channel yet", HttpStatus.BAD_REQUEST);
+    }
+}
+
 export class WrongPasswordException extends CoreModuleException {
     constructor() {
         super("Wrong password", HttpStatus.BAD_REQUEST);
@@ -40,5 +52,11 @@ export class WrongPasswordException extends CoreModuleException {
 export class ProfileNotFoundException extends CoreModuleException {
     constructor() {
         super("Profile not found", HttpStatus.NOT_FOUND);
+    }
+}
+
+export class ProfileUploadAvatarException extends CoreModuleException {
+    constructor(msg = "") {
+        super("Upload fail! " + msg, HttpStatus.BAD_REQUEST);
     }
 }
