@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res, UseInterceptors } from "@nestjs/common/decorators";
+import { Body, Controller, Post, Res } from "@nestjs/common/decorators";
 import { Response } from "express";
 import { UseFormData } from "src/helpers/interceptors";
 import { LoginUserInput } from "src/user-management/core";
@@ -21,7 +21,8 @@ export class OfficialAuthController {
             httpOnly: false
         });
         return response.json({
-            code: 0
+            code: 0,
+            uid: res.uid
         });
     }
 }

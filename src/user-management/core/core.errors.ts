@@ -9,7 +9,7 @@ import { HttpException, HttpStatus } from "@nestjs/common";
 
 export class UserModuleException extends HttpException {
     constructor(message: string, code: number = HttpStatus.INTERNAL_SERVER_ERROR) {
-        super(`[UserModule] ${message}`, code);
+        super(`${message}`, code);
     }
 }
 

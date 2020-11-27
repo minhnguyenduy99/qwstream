@@ -21,6 +21,7 @@ export class OfficialAuthServices {
     async OfficialLogin(input: LoginUserInput) {
         const user = await this.userQueryService.checkLogin(input);
         return {
+            uid: user.uid,
             access_token: await this.generateAccessToken(user.uid),
             refresh_token: await this.generateRefreshToken(user.uid),
         }
