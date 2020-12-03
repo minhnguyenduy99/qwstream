@@ -13,8 +13,8 @@ export class UserQueryService {
         private readonly encryptService: EncryptService
     ) { }
 
-    async findUserById(userId: string) {
-        const user = await this.userModel.findById(userId);
+    async findUserById(userId: string, projection = undefined) {
+        const user = await this.userModel.findById(userId, projection);
         return user;
     }
 
@@ -40,6 +40,9 @@ export class UserQueryService {
 
     async getOnlineStatus(uid: string) {
         const user = await this.findUserById(uid);
+        if (!user) {
+            throw new UserNotFoundException();
+        }
         return user.onlineStatus;
     }
 

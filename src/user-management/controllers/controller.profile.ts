@@ -12,8 +12,8 @@ export class ProfileController {
     ) { }
 
     @Get()
-    async findProfile(@Body() input: FindProfileInput) {
-        const profile = await this.profileQueryService.findProfile(input.uid);
+    async findProfile(@Query("uid", new ParamValidationPipe(ObjectIdFormat)) uid: string) {
+        const profile = await this.profileQueryService.findProfile(uid);
         return {
             nickname: profile.nickname,
             day_of_birth: profile.date_of_birth,
