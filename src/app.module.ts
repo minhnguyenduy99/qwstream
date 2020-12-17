@@ -5,6 +5,7 @@ import { AppConfig } from "./app.config";
 import { UserManagementModule } from "./user-management";
 import { ChannelModule } from "./channel";
 import { AuthModule } from "./authentication";
+import { AuthorizationModule } from "./authorization";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 
 @Module({
@@ -21,7 +22,10 @@ import { EventEmitterModule } from "@nestjs/event-emitter";
     }),
     UserManagementModule,
     ChannelModule,
-    AuthModule
+    AuthModule,
+    AuthorizationModule.forRoot({
+      roles: ["channel-owner", "user", "guest"]
+    })
   ]
 })
 export class AppModule {}
