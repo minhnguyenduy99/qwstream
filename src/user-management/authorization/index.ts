@@ -1,1 +1,0 @@
-export { default as AuthorizationModule } from "./authorization.module";

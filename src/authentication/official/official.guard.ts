@@ -13,7 +13,7 @@ export class OfficialAuthGuard implements CanActivate {
         let request = context.switchToHttp().getRequest() as Request;
 
         if (request.headers.authorization) {
-            var ret = await this.officialAuthServices.checkAccessToken(request.headers.authorization, request.cookies["refresh_token"]);
+            let ret = await this.officialAuthServices.checkAccessToken(request.headers.authorization, request.cookies["refresh_token"]);
             switch (ret[0]) {
                 case OfficialAuthCode.QUALIFICATION:
                     if (ret[1]) {

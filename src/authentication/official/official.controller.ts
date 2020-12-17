@@ -1,7 +1,7 @@
-import { Body, Controller, Post, Res } from "@nestjs/common/decorators";
-import { Response } from "express";
+import { Body, Controller, Post, UseInterceptors } from "@nestjs/common/decorators";
 import { UseFormData } from "src/helpers/interceptors";
 import { LoginUserInput } from "src/user-management/core";
+import { SetCookieInterceptor } from "./official.interceptor";
 import { OfficialAuthServices } from "./official.services";
 
 @Controller('login')
@@ -12,17 +12,12 @@ export class OfficialAuthController {
 
     @Post('official-auth')
     @UseFormData()
-    async Login(@Body() input: LoginUserInput, @Res() response: Response) {
+    @UseInterceptors(SetCookieInterceptor)
+    async Login(@Body() input: LoginUserInput) {
         const res = await this.officialAuthServices.OfficialLogin(input);
-        response.cookie("access_token", res.access_token, {
-            httpOnly: true
-        });
-        response.cookie("refresh_token", res.refresh_token, {
-            httpOnly: false
-        });
-        return response.json({
-            code: 0,
-            uid: res.uid
-        });
+        return {
+            ...res,
+            code: 0
+        }
     }
 }
