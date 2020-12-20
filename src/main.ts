@@ -7,13 +7,11 @@ import { APP_CONFIG_KEY } from "./app.config";
 import { BodyValidationPipe } from "@helpers/validation";
 import * as cookieParser from "cookie-parser"
 import { initAdapter } from "@services/redis-socket";
-import { UpdateAccessTokenInterceptor } from "./authentication/official";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.useGlobalPipes(new BodyValidationPipe());
-  app.useGlobalInterceptors(new UpdateAccessTokenInterceptor());
 
   // initAdapter(app);
 

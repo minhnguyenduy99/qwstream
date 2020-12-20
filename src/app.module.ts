@@ -7,6 +7,8 @@ import { ChannelModule } from "./channel";
 import { AuthModule } from "./authentication";
 import { AuthorizationModule } from "./authorization";
 import { EventEmitterModule } from "@nestjs/event-emitter";
+import { StreamingModule } from "./streaming";
+import { IdGeneratorModule } from "./services/id-generator";
 
 @Module({
   imports: [
@@ -20,7 +22,9 @@ import { EventEmitterModule } from "@nestjs/event-emitter";
     EventEmitterModule.forRoot({
       delimiter: "."
     }),
+    IdGeneratorModule,
     UserManagementModule,
+    StreamingModule,
     ChannelModule,
     AuthModule,
     AuthorizationModule.forRoot({

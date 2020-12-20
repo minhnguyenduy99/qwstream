@@ -1,13 +1,13 @@
 import { Module } from "@nestjs/common";
-import { GoogleAuthModule } from "./google-auth";
-import { OfficialModule } from "./official";
+import { LocalAuthModule } from "./auth-local";
+import { AuthController } from "./auth.controller";
 
 
 @Module({
     imports: [
-        GoogleAuthModule,
-        OfficialModule
-    ]
+        LocalAuthModule
+    ],
+    controllers: [AuthController]
 })
 export class AuthModule {
 }
