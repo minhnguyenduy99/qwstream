@@ -1,20 +1,13 @@
 import { DynamicModule, Inject, Module, OnModuleInit, Optional, Provider } from "@nestjs/common";
 import { ModuleType, MODULE_KEYS } from "./consts";
-import { AuthCoreRootOptions, AuthFeatureConfig, AuthFeatureOptions, AuthRoleProvider, IAuthorizationHook } from "./interfaces";
+import { AuthCoreRootOptions, AuthFeatureConfig, AuthFeatureOptions, AuthRoleProvider } from "./interfaces";
 import { AuthorizationCoreModule } from "./authorization-core.module";
-import { DefaultPrincipalHandler } from "./utils/principal-handler";
 import { AuthorizationCoreService } from "./services";
 
 
 @Module({
     imports: [AuthorizationCoreModule],
-    providers: [
-        {
-            provide: MODULE_KEYS.PrincipalHandler,
-            useClass: DefaultPrincipalHandler
-        }
-    ],
-    exports: [AuthorizationCoreModule, MODULE_KEYS.PrincipalHandler]
+    exports: [AuthorizationCoreModule]
 })
 export class AuthorizationModule implements OnModuleInit {
 

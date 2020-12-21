@@ -7,7 +7,7 @@ export const MODULE_KEYS = {
     RolePolicyDefinitions: "RPDs",
     AuthFeatureOptions: "AFOs",
     TYPE: "TYPE",
-    PrincipalHandler: "PrincipalHandler",
+    AuthDataHandler: "AuthDataHandler",
     HOOK: "HOOK"
 }
 

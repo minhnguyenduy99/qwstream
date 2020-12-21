@@ -1,7 +1,7 @@
 import { PolicyActionType } from "../consts";
 import { CreatePrincipalOptions, CreatePrincipalPolicyOptions, PrincipalPolicyKey } from "../dto";
 import { PrincipalDTO, PrincipalPolicyDTO } from "../models";
-import { AuthData } from "./principal-handler";
+import { AuthData } from "./auth-data-handler";
 
 
 export interface IAuthorizationService {

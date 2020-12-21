@@ -5,8 +5,8 @@ import { PolicyActionType } from "../consts";
 /**
  * Defines an interface to get the authorization data
  */
-export interface PrincipalHandler {
-    getPrincipal(context: ExecutionContext): AuthData | Promise<AuthData>;
+export interface AuthDataHandler {
+    getAuthData(context: ExecutionContext): AuthData | Promise<AuthData>;
 }
 
 export interface AuthData {

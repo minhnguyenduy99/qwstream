@@ -1,5 +1,5 @@
 import { applyDecorators, SetMetadata } from "@nestjs/common";
-import { DECORATOR_ENTITY, DECORATOR_METHOD_TAG, DECORATOR_ACTION, ActionType, MethodTagValues } from "../consts";
+import { DECORATOR_ENTITY, DECORATOR_METHOD_TAG, DECORATOR_ACTION, ActionType, MethodTagValues, DECORATOR_RESOURCE_HANDLER } from "../consts";
 import { ClassAuthMetadata } from "../interfaces";
 import { AuthorizeMethod } from "./authorize-method.decorator";
 
@@ -24,8 +24,16 @@ export function AuthorizeClass(metadata: ClassAuthMetadata): ClassDecorator {
 
     let decorators = [];
     decorators.push(SetMetadata(DECORATOR_ENTITY, entity));
+    decorators.push(SetMetadata(DECORATOR_RESOURCE_HANDLER, resourceHandler));
 
-    decorators.push((f) => {  
+    decorators.push(applyDefaultsOnMethod(metadata));
+
+    return applyDecorators(...decorators);
+}
+
+
+function applyDefaultsOnMethod({ entity, resourceHandler }: ClassAuthMetadata) {
+    return (f) => {
         const descriptors = Object.getOwnPropertyDescriptors(f.prototype);
         if (!entity) {
             return;
@@ -56,9 +64,7 @@ export function AuthorizeClass(metadata: ClassAuthMetadata): ClassDecorator {
                 }
             }
         });
-    })
-
-    return applyDecorators(...decorators);
+    }
 }
 
 

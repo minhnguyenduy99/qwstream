@@ -20,7 +20,7 @@ export function AuthorizeMethod(metadata: MethodAuthMetadata): MethodDecorator {
 
     decorators.push(SetMetadata(DECORATOR_METHOD_TAG, MethodTagValues.Authorize));
     decorators.push(SetMetadata(DECORATOR_ACTION, [action, type]));
-    decorators.push(SetMetadata(DECORATOR_RESOURCE_HANDLER, resourceHandler));
+    !resourceHandler ?? decorators.push(SetMetadata(DECORATOR_RESOURCE_HANDLER, resourceHandler));
 
     return applyDecorators(...decorators);
 }

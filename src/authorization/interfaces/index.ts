@@ -3,7 +3,7 @@ export { EntityPolicyDefinition } from "./entity-policy-definition";
 export { RolePolicyAssign } from "./role-policy-assign";
 export { AuthFeatureOptions, AuthFeatureConfig } from "./auth-feature-options";
 export { IAuthorizationService } from "./authorization-service";
-export { PrincipalHandler, AuthData } from "./principal-handler";
+export { AuthDataHandler, AuthData } from "./auth-data-handler";
 export * from "./authorization-hooks";
 export * from "./auth-metadata";
 

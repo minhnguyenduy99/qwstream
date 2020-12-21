@@ -1,20 +1,18 @@
-import { ExecutionContext, Injectable } from "@nestjs/common";
+import { ExecutionContext } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { Request } from "express";
-import { ActionType, DECORATOR_ACTION, DECORATOR_RESOURCE_HANDLER, PolicyActionType, PRINCIPAL_HEADER_FIELD } from "../consts";
-import { AuthData, PrincipalHandler } from "../interfaces";
-import { ResourceHandler } from "../interfaces/auth-metadata";
+import { ActionType, DECORATOR_ACTION, DECORATOR_RESOURCE_HANDLER, PolicyActionType } from "../consts";
+import { AuthData, AuthDataHandler, ResourceHandler } from "../interfaces";
 
 
-@Injectable()
-export class DefaultPrincipalHandler implements PrincipalHandler {
+
+export abstract class BaseAuthDataHandler implements AuthDataHandler {
 
     constructor(
-        private readonly reflector: Reflector
-    ) {
-    }
+        protected reflector: Reflector
+    ) {}
 
-    getPrincipal(context: ExecutionContext): AuthData {
+    getAuthData(context: ExecutionContext): AuthData | Promise<AuthData> {
         const req = context.switchToHttp().getRequest() as Request;
         const entityAction = this.reflector.get<string[]>(DECORATOR_ACTION, context.getHandler());
 
@@ -24,9 +22,12 @@ export class DefaultPrincipalHandler implements PrincipalHandler {
 
         const [name, type] = entityAction;
 
-        const resourceHandler = this.reflector.get<ResourceHandler>(
+        const resourceHandler = this.reflector.getAllAndOverride<ResourceHandler>(
             DECORATOR_RESOURCE_HANDLER,
-            context.getHandler()
+            [
+                context.getHandler(),
+                context.getClass()
+            ]
         ) ?? (req => req.headers["qw-resource-id"]);
 
         const [entityName, action] = name.split(".");
@@ -36,7 +37,7 @@ export class DefaultPrincipalHandler implements PrincipalHandler {
 
         if (type === ActionType.role) {
             return {
-                principal_id: req.headers[PRINCIPAL_HEADER_FIELD] as string,
+                principal_id: this.getPrincipalId(req),
                 entity_name: entityName,
                 action_name: action,
                 type: type
@@ -44,11 +45,13 @@ export class DefaultPrincipalHandler implements PrincipalHandler {
         }
 
         return {
-            principal_id: req.headers[PRINCIPAL_HEADER_FIELD] as string,
+            principal_id: this.getPrincipalId(req),
             entity_name: entityName,
             action_name: action,
             type: type as PolicyActionType,
             resources: resourceHandler(req)
         }
     }
+
+    protected abstract getPrincipalId(req: Request): string;
 }

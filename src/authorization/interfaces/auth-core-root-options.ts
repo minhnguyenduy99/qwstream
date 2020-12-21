@@ -1,4 +1,5 @@
 import { ModuleMetadata } from "@nestjs/common";
+import { AuthDataHandler } from "./auth-data-handler";
 
 
 /**
@@ -17,4 +18,6 @@ export interface AuthCoreRootOptions {
      * The list of roles to provide for the application
      */
     roles?: String[] | AuthRoleProvider;
+
+    authDataHandler?: AuthDataHandler;
 }
