@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { AuthGuard } from "@nestjs/passport";
+import { BaseLocalAuthGuard } from "./base-local-auth.guard";
 
 @Injectable()
-export class AccessTokenGuard extends AuthGuard("jwt-access-token") {
+export class AccessTokenGuard extends BaseLocalAuthGuard("jwt-access-token") {
 }

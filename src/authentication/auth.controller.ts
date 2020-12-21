@@ -1,6 +1,6 @@
 import { Controller, HttpCode, Post, Req, UseGuards } from "@nestjs/common";
 import { Request } from "express";
-import { LocalAuthGuard, LocalAuthService, TokenAuthGuard } from "./auth-local";
+import { LocalAuthGuard, LocalAuthService, RefreshTokenGuard } from "./auth-local";
 import { UserData } from "./auth-local/local-auth.interfaces";
 
 
@@ -28,9 +28,9 @@ export class AuthController {
         };
     }
 
-    @TokenAuthGuard()
     @Post("/refresh-token")
     @HttpCode(201)
+    @UseGuards(RefreshTokenGuard)
     async refreshAccessToken(@Req() req: Request) {
         const user = req.user as UserData;
         const accessToken = await this.localAuthService.generateAccessToken(user);

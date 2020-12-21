@@ -48,7 +48,7 @@ import { LocalAuthStrategy } from "./strategies/local-auth.strategy";
         RefreshTokenStrategy,
         LocalAuthStrategy
     ],
-    exports: [LocalAuthService]
+    exports: [LocalAuthService, RefreshTokenStrategy, AccessTokenStrategy]
 })
 export class LocalAuthModule {
 

@@ -26,7 +26,7 @@ import { IdGeneratorModule } from "./services/id-generator";
     UserManagementModule,
     StreamingModule,
     ChannelModule,
-    AuthModule,
+    AuthModule.useGlobal(),
     AuthorizationModule.forRoot({
       roles: ["channel-owner", "user", "guest"]
     })
