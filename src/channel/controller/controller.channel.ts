@@ -1,6 +1,8 @@
-import { Body, Controller, Get, Param, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { FilesInterceptor } from "@nestjs/platform-express";
-import { OfficialAuthGuard } from "src/authentication/official";
+import { AuthorizeClass, AuthorizeMethod, NonAuthorize } from "src/authorization";
+import { ActionType } from "src/authorization/consts";
+import { AuthorizationGuard } from "src/authorization/guards/authorization-guard";
 import { UseFormData } from "src/helpers/interceptors";
 import { ObjectIdFormat, ParamValidationPipe } from "src/helpers/validation";
 import { ChannelNotFoundException } from "..";
@@ -9,6 +11,8 @@ import { ChannelQueryService } from "../services";
 import { ChannelCommitService } from "../services/service.channel.commit";
 
 @Controller('channel')
+@AuthorizeClass({ entity: "ChannelEntity" })
+@UseGuards(AuthorizationGuard())
 export class ChannelController {
     constructor(
         private readonly channelCommitService: ChannelCommitService,
@@ -16,7 +20,6 @@ export class ChannelController {
     ) { }
 
     @Post('create')
-    @UseGuards(OfficialAuthGuard)
     @UseInterceptors(FilesInterceptor('files'))
     async createChannel(@Body() input: CreateChannelInput) {
         const channel = await this.channelCommitService.createChannel(input);
@@ -25,7 +28,20 @@ export class ChannelController {
         } as CreateChannelOutPut
     }
 
+    @Delete('delete')
+    @AuthorizeMethod({
+        type: ActionType.resource,
+        resourceHandler: req => req.query.cid
+    })
+    async deleteChannelByCid(@Query("cid", new ParamValidationPipe(ObjectIdFormat)) cid: string) {
+        await this.channelCommitService.deleteChannel(cid);
+        return {
+            code: 0
+        }
+    }
+
     @Get('find')
+    @NonAuthorize()
     async findChannelByName(@Query("name") name: string, @Query("page") page: number) {
         let channels = await this.channelQueryService.findChannelByName(name, page);
         return channels;
@@ -33,6 +49,9 @@ export class ChannelController {
 
     @Put('update')
     @UseInterceptors(FilesInterceptor('files'))
+    @AuthorizeMethod({
+        type: ActionType.resource
+    })
     async updateChannelInfo(@Body() input: UpdateChannelInfoInput) {
         await this.channelCommitService.updateInfo(input);
         return {
@@ -51,6 +70,7 @@ export class ChannelController {
     }
 
     @Get(':cid')
+    @NonAuthorize()
     async getChannelByCID(@Param("cid", new ParamValidationPipe(ObjectIdFormat)) cid: string) {
         const channel = await this.channelQueryService.getChannel(cid);
         if (!channel) {
