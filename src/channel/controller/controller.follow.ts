@@ -1,9 +1,13 @@
-import { Controller, Put, Query } from "@nestjs/common";
+import { Controller, Put, Query, UseGuards } from "@nestjs/common";
+import { AuthorizeClass } from "src/authorization";
+import { AuthorizationGuard } from "src/authorization/guards/authorization-guard";
 import { ObjectIdFormat, ParamValidationPipe } from "src/helpers/validation";
 import { OnFollowOutput } from "..";
 import { FollowCommitService } from "../services";
 
 @Controller('follow')
+@AuthorizeClass({ entity: "FollowEntity" })
+@UseGuards(AuthorizationGuard())
 export class FollowController {
     constructor(
         private readonly followCommitService: FollowCommitService

@@ -29,6 +29,8 @@ export class ChannelCommitService {
     async updateInfo(update: UpdateChannelInfoInput) {
         const cid = update.cid;
         delete update.cid;
+        delete update["count"];
+        delete update["followers"];
         return this.channelModel.updateOne({ _id: cid }, update)
     }
 
