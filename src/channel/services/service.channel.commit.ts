@@ -28,6 +28,7 @@ export class ChannelCommitService {
     }
 
     async deleteChannel(cid: string) {
+        this.event.emitAsync(constants.onChannelDelete, cid);
         return this.channelModel.deleteOne({ _id: cid });
     }
 

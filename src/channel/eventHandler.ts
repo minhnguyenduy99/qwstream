@@ -11,11 +11,17 @@ export class ChannelEventHandler {
     ) { }
 
     @OnEvent(constants.onChannelCreate, { async: true })
-    async onUserCreate(channel) {
+    async onChannelCreate(channel) {
         this.authorization.createPrincipal({
             principal_id: channel.id,
             role_name: role.channel,
             self_added: true
         });
+    }
+
+    @OnEvent(constants.onChannelDelete, { async: true })
+    async onChannelDelete(channel) {
+        //TODO delete polocy
+        //this.authorization.removeResource()
     }
 }

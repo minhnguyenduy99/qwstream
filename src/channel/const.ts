@@ -1,3 +1,4 @@
 export const constants = {
-    onChannelCreate: "Channel.onUserChannel"
+    onChannelCreate: "Channel.onUserChannel",
+    onChannelDelete: "Channel.onChannelDelete"
 }

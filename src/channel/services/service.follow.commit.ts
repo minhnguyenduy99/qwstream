@@ -12,18 +12,26 @@ export class FollowCommitService {
     ) { }
 
     async onFollow(cid: string, uid: string) {
-        await this.userCommitService.onFollow(cid, uid);
-        return this.followModel.updateOne({ _id: cid }, {
-            $push: { followers: uid },
-            $inc: { count: 1 }
-        })
+        const [, ret] = await Promise.all(
+            [
+                this.userCommitService.onFollow(cid, uid),
+                this.followModel.updateOne({ _id: cid }, {
+                    $push: { followers: uid },
+                    $inc: { count: 1 }
+                })
+            ]
+        )
+        return ret;
     }
 
     async onUnfollow(cid: string, uid: string) {
-        await this.userCommitService.onUnfollow(cid, uid);
-        return this.followModel.updateOne({ _id: cid }, {
-            $pull: { followers: uid },
-            $inc: { count: -1 }
-        })
+        const [, ret] = await Promise.all([
+            this.userCommitService.onUnfollow(cid, uid),
+            this.followModel.updateOne({ _id: cid }, {
+                $pull: { followers: uid },
+                $inc: { count: -1 }
+            })
+        ])
+        return ret;
     }
 }

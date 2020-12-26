@@ -76,4 +76,11 @@ export class UserCommitService {
         }
         return null;
     }
+
+    async onChannelCreate(channel) {
+        return this.userModel.updateOne({ _id: channel.uid }, {
+            $push: { channels: channel.id },
+            $inc: { ccount: 1 }
+        })
+    }
 }

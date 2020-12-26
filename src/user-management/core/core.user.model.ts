@@ -26,6 +26,17 @@ export class User extends Document {
         default: []
     })
     following: string[];
+
+    @Prop({
+        default: 0
+    })
+    ccount: number;
+
+    @Prop({
+        type: [String],
+        default: []
+    })
+    channels: string[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
