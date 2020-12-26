@@ -7,8 +7,8 @@ import { ChannelModule } from "./channel";
 import { AuthModule } from "./authentication";
 import { AuthorizationModule } from "./authorization";
 import { EventEmitterModule } from "@nestjs/event-emitter";
-import { StreamingModule } from "./streaming";
 import { IdGeneratorModule } from "./services/id-generator";
+import { role } from "./role.config";
 
 @Module({
   imports: [
@@ -24,12 +24,11 @@ import { IdGeneratorModule } from "./services/id-generator";
     }),
     IdGeneratorModule,
     UserManagementModule,
-    StreamingModule,
     ChannelModule,
     AuthModule.useGlobal(),
     AuthorizationModule.forRoot({
-      roles: ["channel-owner", "user", "guest"]
+      roles: Object.values(role)
     })
   ]
 })
-export class AppModule {}
+export class AppModule { }

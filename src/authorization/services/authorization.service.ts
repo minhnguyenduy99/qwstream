@@ -330,6 +330,8 @@ export class AuthorizationService implements IAuthorizationService {
         }).populate({
             path: "entity_policy"
         });
+        if (rolePolicies.length == 0)
+            this.logger.warn(`role ${role} not found or not have any policies`)
         return rolePolicies;
     }
 

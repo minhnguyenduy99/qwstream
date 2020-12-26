@@ -7,6 +7,8 @@ import { User } from "./core.user.model";
 import { UserQueryService } from "./core.UserQueryService.service";
 import { UpdatePasswordInput, CreateUserInput, UpdateOnlineStatusInput } from "./core.dto.user";
 import { ProfileCommitService } from "./core.ProfileCommitService.service";
+import { EventEmitter2 } from "@nestjs/event-emitter";
+import { constants } from "../const";
 
 @Injectable()
 export class UserCommitService {
@@ -15,7 +17,8 @@ export class UserCommitService {
         @InjectModel(User.name) private userModel: Model<User>,
         private readonly queryService: UserQueryService,
         private readonly profileCommitService: ProfileCommitService,
-        private readonly encryptService: EncryptService
+        private readonly encryptService: EncryptService,
+        private readonly event: EventEmitter2
     ) { }
 
     async createUser(input: CreateUserInput) {
@@ -27,6 +30,7 @@ export class UserCommitService {
         const createUser = new this.userModel(input);
         const user = await createUser.save();
         this.profileCommitService.createProfile({ uid: user._id });
+        this.event.emitAsync(constants.onUserCreate, user);
         return user;
     }
 
