@@ -28,6 +28,12 @@ export class ImageStorage_Album extends Document {
         default: ""
     })
     description: string;
+
+    @Prop({
+        required: false,
+        default: null
+    })
+    default_image?: string;
 }
 
 export const AlbumSchema = SchemaFactory.createForClass(ImageStorage_Album);

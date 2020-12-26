@@ -1,15 +1,17 @@
 import "module-alias/register";
+import { join } from "path";
 import { NestFactory } from "@nestjs/core";
-import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import { ConfigService } from "@nestjs/config";
 import { AppModule } from "./app.module";
-import { APP_CONFIG_KEY } from "./app.config";
 import { BodyValidationPipe } from "@helpers/validation";
 import * as cookieParser from "cookie-parser"
+import { static as serverStatic } from "express";
 import { initAdapter } from "@services/redis-socket";
+import { AppService } from "./app.service";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const appService = app.get(AppService);
+  const rootDir = appService.rootDir;
 
   app.useGlobalPipes(new BodyValidationPipe());
 
@@ -21,22 +23,13 @@ async function bootstrap() {
   });
 
   app.use(cookieParser());
-  const config = app.get(ConfigService);
+  app.use("/public", serverStatic(join(rootDir, "public")));
 
-  const options = new DocumentBuilder()
-    .setTitle("QWStream API Specification")
-    .setDescription("API Specification for QWStream")
-    .setVersion("1.0")
-    .build();
-
-  const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup(config.get(APP_CONFIG_KEY.SWAGGER_API_PATH), app, document);
-
-  const host = config.get(APP_CONFIG_KEY.HOST);
-  const port = config.get(APP_CONFIG_KEY.PORT);
+  const host = appService.host;
+  const port = appService.port;
 
   await app.listen(port, host, () => {
-    console.log(`Listening on ${host}:${port}`);
+    console.log(`Listening on ${appService.serverURL}`);
   });
 }
 bootstrap();

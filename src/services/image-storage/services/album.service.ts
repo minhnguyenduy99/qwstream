@@ -19,9 +19,10 @@ export class AlbumService {
 
     }
 
-    async createAlbum({ name, description = name }: CreateAlbumInput): Promise<CreateAlbumOutput> {
+    async createAlbum({ name, description = name, default_image }: CreateAlbumInput): Promise<CreateAlbumOutput> {
         let album = await this.findAlbum(name);
         if (album) {
+            await this.updateDefaultImage(default_image, album);
             return {
                 code: 0,
                 data: this.modelToAlbumDTO(album)
@@ -43,7 +44,8 @@ export class AlbumService {
         const albumDTO = {
             ...data.data,
             title: name,
-            description: description
+            description: description,
+            defaultImage: default_image
         } as AlbumDTO;
         album = await this.saveAlbum(albumDTO);
         return {
@@ -63,13 +65,19 @@ export class AlbumService {
         return album;
     }
 
-    protected async saveAlbum({ id, title, description, deletehash }: AlbumDTO) {
+    async updateDefaultImage(defaultImage: string, album: ImageStorage_Album) {
+        album.default_image = defaultImage;
+        await album.save();
+    }
+
+    protected async saveAlbum({ id, title, description, deletehash, defaultImage }: AlbumDTO) {
         try {
             const album = await this.albumModel.create({
                 album_id: id,
                 delete_hash: deletehash,
                 title,
-                description
+                description,
+                default_image: defaultImage
             });
             return album;
         } catch (err) {

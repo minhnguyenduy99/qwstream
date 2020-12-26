@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { Global, Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { MongooseModule } from "@nestjs/mongoose";
 import { AppConfig } from "./app.config";
@@ -7,8 +7,8 @@ import { ChannelModule } from "./channel";
 import { AuthModule } from "./authentication";
 import { AuthorizationModule } from "./authorization";
 import { EventEmitterModule } from "@nestjs/event-emitter";
-import { StreamingModule } from "./streaming";
 import { IdGeneratorModule } from "./services/id-generator";
+import { AppService } from "./app.service";
 
 @Module({
   imports: [
@@ -24,12 +24,16 @@ import { IdGeneratorModule } from "./services/id-generator";
     }),
     IdGeneratorModule,
     UserManagementModule,
-    StreamingModule,
     ChannelModule,
     AuthModule.useGlobal(),
     AuthorizationModule.forRoot({
       roles: ["channel-owner", "user", "guest"]
     })
-  ]
+  ],
+  providers: [
+    AppService
+  ],
+  exports: [AppService]
 })
+@Global()
 export class AppModule {}

@@ -1,4 +1,4 @@
-import { HttpService, HttpStatus, Inject, Injectable, Logger, OnModuleInit } from "@nestjs/common";
+import { HttpService, HttpStatus, Inject, Injectable, Logger, OnModuleInit, Optional } from "@nestjs/common";
 import { ImageStorageConfig, KEYS, StorageOptions } from "../config";
 import { DeleteImageOutput, GetImageOutput, ReplaceImageInput, UploadImageInput, UploadImageOutput } from "../dto";
 import { ImageStorageCodes } from "../image-storage-codes";
@@ -13,6 +13,7 @@ export class ImageStorageService implements OnModuleInit {
     constructor(
         @Inject(KEYS.appClientID) private readonly clientId: string,
         @Inject(KEYS.storageOptions) private readonly storageOptions: StorageOptions,
+        @Optional() @Inject(KEYS.defaultImage) private readonly defaultImage: string,
         private readonly albumService: AlbumService,
         private readonly httpService: HttpService,
         private readonly logger: Logger
@@ -24,7 +25,8 @@ export class ImageStorageService implements OnModuleInit {
         const { albumName, description = "" } = this.storageOptions;
         const createAlbum = await this.albumService.createAlbum({
             name: albumName,
-            description: description
+            description: description,
+            default_image: this.defaultImage
         });
         if (createAlbum.code === ImageStorageCodes.CREATE_ALBUM_FAILED) {
             this.logger.error("Create album failed: " + albumName);
@@ -36,6 +38,13 @@ export class ImageStorageService implements OnModuleInit {
             albumHash: album.deletehash,
             albumID: album.id
         }
+    }
+
+    /**
+     * Get default image of the album
+     */
+    getDefaultImage() {
+        return this.defaultImage;
     }
     
 

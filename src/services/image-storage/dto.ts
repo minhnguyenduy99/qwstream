@@ -6,6 +6,7 @@ export interface AlbumDTO {
     title: string;
     description: string;
     deletehash: string;
+    defaultImage?: string;
 }
 
 export interface BasicData {
@@ -22,6 +23,9 @@ export class CreateAlbumInput {
 
     @IsOptional()
     description?: string;
+
+    @IsOptional()
+    default_image?: string;
 }
 
 export interface CreateAlbumOutput {
