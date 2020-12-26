@@ -1,5 +1,6 @@
 import { Controller, Put, Query, UseGuards } from "@nestjs/common";
-import { AuthorizeClass } from "src/authorization";
+import { AuthorizeClass, AuthorizeMethod } from "src/authorization";
+import { ActionType } from "src/authorization/consts";
 import { AuthorizationGuard } from "src/authorization/guards/authorization-guard";
 import { ObjectIdFormat, ParamValidationPipe } from "src/helpers/validation";
 import { OnFollowOutput } from "..";
@@ -14,6 +15,10 @@ export class FollowController {
     ) { };
 
     @Put('f')
+    @AuthorizeMethod({
+        type: ActionType.resource,
+        resourceHandler: req => req.query.uid
+    })
     async onFollow(@Query("cid", new ParamValidationPipe(ObjectIdFormat)) cid: string, @Query("uid", new ParamValidationPipe(ObjectIdFormat)) uid: string) {
         await this.followCommitService.onFollow(cid, uid);
         return {
@@ -22,6 +27,10 @@ export class FollowController {
     }
 
     @Put('u')
+    @AuthorizeMethod({
+        type: ActionType.resource,
+        resourceHandler: req => req.query.uid
+    })
     async onUnFollow(@Query("cid", new ParamValidationPipe(ObjectIdFormat)) cid: string, @Query("uid", new ParamValidationPipe(ObjectIdFormat)) uid: string) {
         await this.followCommitService.onUnfollow(cid, uid);
         return {

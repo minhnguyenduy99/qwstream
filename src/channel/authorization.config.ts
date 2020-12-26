@@ -3,13 +3,19 @@ import { ActionType } from "src/authorization/consts";
 export default {
     policies: [
         {
+            policyName: "createChannel",
+            entity: "ChannelEntity",
+            actions: [
+                "createChannel"
+            ]
+        },
+        {
             policyName: "fullAccessChannel",
             entity: "ChannelEntity",
             actions: [
-                "createChannel",
-                "updateChannelInfo",
-                "uploadAvatar",
-                "deleteChannelByCid"
+                { name: "updateChannelInfo", type: ActionType.resource },
+                { name: "uploadAvatar", type: ActionType.resource },
+                { name: "deleteChannelByCid", type: ActionType.resource }
             ]
         },
 
@@ -28,7 +34,8 @@ export default {
             ["FollowEntity", "fullAccessFollow"]
         ],
         user: [
-            ["FollowEntity", "fullAccessFollow"]
+            ["FollowEntity", "fullAccessFollow"],
+            ["ChannelEntity", "createChannel"]
         ],
         admin: [
             ["ChannelEntity", "fullAccessChannel"],

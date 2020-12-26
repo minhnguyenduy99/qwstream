@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { FilesInterceptor } from "@nestjs/platform-express";
-import { AuthorizeClass, NonAuthorize } from "src/authorization";
+import { AuthorizeClass, AuthorizeMethod, NonAuthorize } from "src/authorization";
+import { ActionType } from "src/authorization/consts";
 import { AuthorizationGuard } from "src/authorization/guards/authorization-guard";
 import { UseFormData } from "src/helpers/interceptors";
 import { ObjectIdFormat, ParamValidationPipe } from "src/helpers/validation";
@@ -28,6 +29,10 @@ export class ChannelController {
     }
 
     @Delete('delete')
+    @AuthorizeMethod({
+        type: ActionType.resource,
+        resourceHandler: req => req.query.cid
+    })
     async deleteChannelByCid(@Query("cid", new ParamValidationPipe(ObjectIdFormat)) cid: string) {
         await this.channelCommitService.deleteChannel(cid);
         return {
@@ -44,6 +49,9 @@ export class ChannelController {
 
     @Put('update')
     @UseInterceptors(FilesInterceptor('files'))
+    @AuthorizeMethod({
+        type: ActionType.resource
+    })
     async updateChannelInfo(@Body() input: UpdateChannelInfoInput) {
         await this.channelCommitService.updateInfo(input);
         return {

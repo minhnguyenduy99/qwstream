@@ -8,6 +8,7 @@ import { UserManagementModule } from "src/user-management";
 import authorizationConfig from "./authorization.config";
 import { FollowController } from "./controller";
 import { ChannelController } from "./controller/controller.channel";
+import { ChannelEventHandler } from "./eventHandler";
 import { Channel, ChannelSchema } from "./model";
 import { FollowCommitService, FollowQueryService } from "./services";
 import { ChannelCommitService } from "./services/service.channel.commit";
@@ -27,7 +28,7 @@ import { ChannelQueryService } from "./services/service.channel.query";
         AuthorizationModule.forFeature({ config: authorizationConfig }),
     ],
     providers: [
-        ChannelCommitService, ChannelQueryService, FollowCommitService, FollowQueryService
+        ChannelCommitService, ChannelQueryService, FollowCommitService, FollowQueryService, ChannelEventHandler
     ],
     controllers: [
         ChannelController,
