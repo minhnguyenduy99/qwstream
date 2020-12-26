@@ -3,13 +3,6 @@ import { ActionType } from "src/authorization/consts";
 export default {
     policies: [
         {
-            policyName: "readonlyProfile",
-            entity: "ProfileEntity",
-            actions: [
-                "findProfile"
-            ]
-        },
-        {
             policyName: "fullAccessProfile",
             entity: "ProfileEntity",
             actions: [
@@ -19,14 +12,6 @@ export default {
             ]
         },
 
-        {
-            policyName: "readonlyUser",
-            entity: "UserEntity",
-            actions: [
-                "getUserByID",
-                "getOnlineStatus"
-            ]
-        },
         {
             policyName: "fullAccessUser",
             entity: "UserEntity",
@@ -40,10 +25,6 @@ export default {
         }
     ],
     assigns: {
-        guest: [
-            ["ProfileEntity", "readonlyProfile"],
-            ["UserEntity", "readonlyUser"]
-        ],
         user: [
             ["ProfileEntity", "fullAccessProfile"],
             ["UserEntity", "fullAccessUser"]
