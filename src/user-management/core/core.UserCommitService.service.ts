@@ -83,4 +83,11 @@ export class UserCommitService {
             $inc: { ccount: 1 }
         })
     }
+
+    async onChannelDelete(channel) {
+        return this.userModel.updateOne({ _id: channel.uid }, {
+            $pull: { channels: channel.id },
+            $inc: { ccount: -1 }
+        })
+    }
 }

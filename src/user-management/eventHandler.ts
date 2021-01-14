@@ -26,4 +26,9 @@ export class UserEventHandler {
     async onChannelCreate(channel) {
         this.userCommitService.onChannelCreate(channel);
     }
+
+    @OnEvent(channelConst.onChannelCreate, { async: true })
+    async onChannelDelete(channel) {
+        this.userCommitService.onChannelDelete(channel);
+    }
 }
