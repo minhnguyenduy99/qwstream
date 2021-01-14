@@ -26,7 +26,7 @@
     "@helpers/*": "dist/helpers/*/index.js"
   },
   "dependencies": {
-    "@nestjs/common": "^7.0.0",
+    "@nestjs/common": "^7.6.5",
     "@nestjs/config": "^0.5.0",
     "@nestjs/core": "^7.0.0",
     "@nestjs/event-emitter": "0.0.2",
@@ -42,6 +42,7 @@
     "class-transformer": "^0.3.1",
     "class-validator": "^0.12.2",
     "cookie-parser": "^1.4.5",
+    "csurf": "^1.11.0",
     "express": "^4.17.1",
     "googleapis": "^64.0.0",
     "ioredis": "^4.17.3",
@@ -54,6 +55,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4",
+    "socket.io-redis": "^6.0.1",
     "swagger-ui-express": "^4.1.4",
     "uuid": "^8.3.1"
   },
@@ -63,6 +65,7 @@
     "@nestjs/testing": "^7.0.0",
     "@types/bcrypt": "^3.0.0",
     "@types/cookie-parser": "^1.4.2",
+    "@types/csurf": "^1.11.0",
     "@types/express": "^4.17.3",
     "@types/ioredis": "^4.17.4",
     "@types/jest": "26.0.10",

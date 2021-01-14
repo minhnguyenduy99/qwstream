@@ -1,0 +1,1 @@
+export { SocketAdapter } from "./socket-adapter.decorator";

@@ -5,20 +5,22 @@ import { AppModule } from "./app.module";
 import { BodyValidationPipe } from "@helpers/validation";
 import * as cookieParser from "cookie-parser"
 import { static as serverStatic } from "express";
-import { initAdapter } from "@services/redis-socket";
 import { AppService } from "./app.service";
+import { RequestLogInterceptor } from "./helpers/interceptors";
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  
   const appService = app.get(AppService);
   const rootDir = appService.rootDir;
 
   app.useGlobalPipes(new BodyValidationPipe());
-
-  // initAdapter(app);
+  // app.useGlobalFilters(new HttpExceptionFilter(httpAdapter));
+  app.useGlobalInterceptors(new RequestLogInterceptor());
 
   app.enableCors({
-    origin: [/localhost/, "http://192.168.148.57:3016"],
+    origin: [/localhost/, /192.168.1.241/],
     credentials: true
   });
 

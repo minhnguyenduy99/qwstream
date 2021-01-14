@@ -7,12 +7,20 @@ import { APP_CONFIG_KEY } from "./app.config";
 @Injectable()
 export class AppService {
 
+    protected protocol: string
+
     constructor(
         private readonly configService: ConfigService
-    ) {}
+    ) {
+        this.protocol = this.isHTTPS ? "https" : "http";
+    }
+
+    get isHTTPS() {
+        return this.configService.get(APP_CONFIG_KEY.HTTPS) === true;
+    }
 
     get serverURL() {
-        return `${this.host}:${this.port}`;
+        return `${this.protocol}://${this.host}:${this.port}`;
     }
 
     get publicURL() {

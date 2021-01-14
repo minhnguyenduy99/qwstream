@@ -1,0 +1,14 @@
+
+export const KEYS = {
+    STREAM_SERVER: "STREAM_SERVER",
+    STREAM_KEY_EXPIRE_TIME: "STREAM_KEY_EXPIRE_TIME",
+    REDIS_HOST: "STREAM_REDIS_HOST",
+    REDIS_PORT: "STREAM_REDIS_PORT",
+}
+
+export const configLoader = () => ({
+    [KEYS.STREAM_SERVER]: process.env.STREAM_SERVER_ROUTE || "",
+    [KEYS.STREAM_KEY_EXPIRE_TIME]: parseInt(process.env.STREAM_KEY_EXPIRE_TIME, 10) || 3000,
+    [KEYS.REDIS_HOST]: process.env.STREAM_REDIS_HOST,
+    [KEYS.REDIS_PORT]: parseInt(process.env.STREAM_REDIS_PORT)
+});
