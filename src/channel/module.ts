@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
+import { AppService } from "src/app.service";
 import { OfficialModule } from "src/authentication/official";
 import { AuthorizationModule } from "src/authorization";
 import { PaginationModule } from "src/helpers/pagination";
@@ -23,7 +24,14 @@ import { ChannelQueryService } from "./services/service.channel.query";
         UserManagementModule,
         OfficialModule,
         ImageStorageModule.forFeature({
-            albumName: "Channel Avatar"
+            albumName: "Channel Avatar",
+            defaultImage: {
+                useFactory: (appService: AppService) => {
+                    const result = `${appService.publicURL}/images/channel_default.png`;
+                    return result;
+                },
+                inject: [AppService]
+            }
         }),
         AuthorizationModule.forFeature({ config: authorizationConfig }),
     ],
