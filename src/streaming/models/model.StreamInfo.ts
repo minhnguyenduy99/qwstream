@@ -1,5 +1,6 @@
 import { Prop, raw, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
+import { StreamCategory } from "./model.StreamCategory";
 
 @Schema()
 export class StreamInfo extends Document {
@@ -32,11 +33,11 @@ export class StreamInfo extends Document {
     })
     thumbnail_url: string;
 
-    @Prop(raw({
-        category_id: { type: Number },
-        category_name: { type: String },
-    }))
-    category: Record<string, any>;
+    @Prop({
+        required: true,
+        type: Number
+    })
+    category: number;
 
     @Prop({
         type: [String],
@@ -69,6 +70,19 @@ export const StreamInfoSchema = SchemaFactory.createForClass(StreamInfo);
 StreamInfoSchema.virtual("stream_id").get(function() {
     return this._id;
 })
+
+StreamInfoSchema.virtual("stream_category", {
+    ref: StreamCategory.name,
+    localField: "category",
+    foreignField: "category_id",
+    justOne: true
+});
+
+StreamInfoSchema.index(
+    {
+        tags: 1
+    }
+)
 
 StreamInfoSchema.index(
     {

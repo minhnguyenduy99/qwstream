@@ -14,7 +14,10 @@ export class StreamCategoryService {
     ) {}
     
     async findAllCategories() {
-        const categories = await this.categoryModel.find();
+        const categories = await this.categoryModel.find({}, {
+            _id: 0,
+            __v: 0
+        });
         return categories;
     }
 

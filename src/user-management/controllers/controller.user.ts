@@ -60,7 +60,7 @@ export class UserController {
 
   @Get("get")
   async getUserByID(@Query("uid", new ParamValidationPipe(ObjectIdFormat)) uid: string) {
-    const user = await this.queryService.findUserById(uid, { password: false, following: false, _id: false, __v: false });
+    const user = await this.queryService.findUserById(uid, { password: false, _id: false, __v: false });
     return user;
   }
 }

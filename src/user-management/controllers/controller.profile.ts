@@ -28,8 +28,7 @@ export class ProfileController {
 
     @Put("update")
     @AuthorizeMethod({
-        type: ActionType.resource,
-        resourceHandler: req => req.body.uid
+        type: ActionType.resource
     })
     @UseInterceptors(FilesInterceptor('files'))
     async updateProfile(@Body() input: UpdateProfileInput) {

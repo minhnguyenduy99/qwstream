@@ -1,4 +1,4 @@
-import { Transform } from "class-transformer";
+import { Expose, Transform } from "class-transformer";
 import { IsArray, IsIn, IsNotEmpty, IsNumber, IsOptional } from "class-validator";
 
 
@@ -53,15 +53,58 @@ export class StreamKeyAuthInput {
 
 export class StreamSearchInput {
     @IsOptional()
-    category_id: number;
+    @Transform((val) => {
+        if (!val) return null;
+        return Number.parseInt(val);
+    })
+
+    @IsOptional()
+    @IsNumber({ allowNaN: false, allowInfinity: false })
+    @Expose({
+        name: "category-id"
+    })
+    category_id?: number;
     
+    @IsNotEmpty()
+    @Expose({ name: "value"})
     @IsNotEmpty()
     search_value: string;
 
     @IsOptional()
-    search_for_current?: boolean;
+    @IsIn(["current", "old"])
+    @IsNotEmpty()
+    type?: "current" | "old";
 }
 
+export class StreamWithSortedInput {
+
+    @IsOptional()
+    @IsIn(["current", "old"])
+    @IsNotEmpty()
+    type?: "current" | "old";
+
+    @IsOptional()
+    @Transform(val => {
+        if (!val) return null;
+        return Number.parseInt(val);
+    })
+    @IsIn([-1, 0, 1])
+    @Expose({
+        name: "sort-by-view"
+    })
+    sortByView: number;
+
+    @IsOptional()
+    @Transform(val => {
+        if (!val) return null;
+        return Number.parseInt(val);
+    })
+    @IsIn([-1, 0, 1])
+    @Expose({
+        name: "sort-by-time"
+    })
+    sortByTime: number;
+}
 export class GetChannelOldStreamingInput {
     @IsIn([-1, 1])
     @IsOptional()
@@ -76,6 +119,13 @@ export interface GetChannelOldStreamingOutput {
     results: StreamInfoDTO[];
     next: string;
     count: number;
+}
+
+export interface StreamPaginationOutput {
+    count: number;
+    next: string;
+    results: StreamInfoDTO[];
+    search?: any;
 }
 
 export interface StreamSearchOutput {

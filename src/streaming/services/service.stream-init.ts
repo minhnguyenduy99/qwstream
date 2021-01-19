@@ -46,10 +46,7 @@ export class StreamInitService {
             const stream = await this.streamModel.create({
                 stream_title: input.stream_title,
                 stream_time_start: Date.now(),
-                category: {
-                    category_id: cat.category_id,
-                    category_name: cat.category_name
-                },
+                category: cat.category_id,
                 tags: input.tags,
                 channel: {
                     channel_id: channel_id
@@ -89,17 +86,12 @@ export class StreamInitService {
             }
             thumbnail = uploadResult.data.url;
         }
-        console.log(thumbnail);
         let data = {
             ...input,
-            category: {
-                category_id: category.category_id,
-                category_name: category.category_name
-            },
+            category: category.category_id,
             ...(thumbnail && { thumbnail_url: thumbnail })  
         };
         try {
-            console.log(data);
             stream = await this.streamModel.findOneAndUpdate({
                 "channel.channel_id": channelId
             }, data, {

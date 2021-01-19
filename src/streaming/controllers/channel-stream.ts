@@ -11,7 +11,7 @@ import { STREAM_EVENTS } from "../consts";
 import { KEYS } from "../config";
 import { StreamStatsService } from "../stream-stats";
 
-@Controller("stream")
+@Controller("channels/:channel_id/streams")
 export class ChannelStreamViewController {
 
     
@@ -60,7 +60,7 @@ export class ChannelStreamViewController {
         return this.streamKeyService.generateStreamKey(stream_id);
     }
 
-    @Post(":channel_id")
+    @Post()
     @UseFormData({
         fileField: "thumbnail_file",
         jsonFields: ["tags"]
@@ -77,7 +77,7 @@ export class ChannelStreamViewController {
         return result;
     }
 
-    @Put(":channel_id")
+    @Put()
     @UseFormData({
         fileField: "thumbnail_file",
         jsonFields: ["tags"]
@@ -92,7 +92,7 @@ export class ChannelStreamViewController {
         return result;
     }
 
-    @Get(":channel_id/videos")
+    @Get("/old")
     async getChannelOldStreamingVideos(
         @Param("channel_id", new ParamValidationPipe(ObjectIdFormat)) channel_id: string,
         @Query("page", new ParsePagePipe()) page: number,
@@ -101,7 +101,7 @@ export class ChannelStreamViewController {
         return this.channelStreamingView.getChannelOldStreamingVideos(channel_id, page, input);
     }
 
-    @Get(":channel_id/current")
+    @Get("/current")
     async getCurrentStreamingInfo(
         @Param("channel_id", new ParamValidationPipe(ObjectIdFormat)) channel_id: string,
         @Query("latest", ParseIntPipe) latest: number

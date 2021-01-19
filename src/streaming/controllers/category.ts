@@ -3,14 +3,14 @@ import { StreamCategoryService } from "../services";
 
 
 
-@Controller("stream-categories")
+@Controller("categories")
 export class StreamCategoryController {
 
     constructor(
         private readonly categoryService: StreamCategoryService
     ) {}
 
-    @Get()
+    @Get("/all")
     @HttpCode(200)
     findAllCategories() {
         return this.categoryService.findAllCategories();

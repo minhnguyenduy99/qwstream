@@ -42,7 +42,7 @@ export interface LimitOptions {
   }
 
   additionQuery?: {
-    [key: string]: string;
+    [key: string]: any;
   }
 }
 
